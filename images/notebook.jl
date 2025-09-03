@@ -30,7 +30,7 @@ This basic design document shows how to construct the [JuliaAstro](https://githu
 md"""
 ## Concept
 
-The standard Julia logo, but with the circle shapes replaces by stars shapes.
+The standard Julia logo, but with the circle shapes replaces by star shapes.
 """
 
 # ╔═╡ d7a82821-23e2-4700-8fe4-41061ce3a66c
@@ -70,7 +70,7 @@ width, height = 300, 300
 md"""
 ## Framework
 
-Assuming a square grid ($(width) x $(height) pixels by default), we place a star shape with circumradius ``R_\text{star}`` at each vertex of an equilateral triangle with circumradius ``\Rt``, oriented with one base parallel to the bottom side of the page. The center of the equilateral triangle is placed at the coordinate ``(0, y_\text{offset})`` to keep the horizontal and vertical whitespace balanced. To the right and down is defined as positive. The vertical coordinate offset ``y_\text{offset}`` is found by splitting the distance between the top and bottom extent of the image in half. We take the top and bottom ``y`` coordinate of the top and bottom circumcircles as the top and bottom extent, respectively:
+Assuming a square grid ($(width) x $(height) pixels by default), we place a star shape with circumradius ``R_\text{star}`` at each vertex of an equilateral triangle with circumradius ``R_\text{tri}`` oriented with one base parallel to the bottom side of the page. The center of the equilateral triangle is placed at the coordinate ``(0, y_\text{offset})`` to keep the horizontal and vertical whitespace balanced. To the right and down is defined as positive. The vertical coordinate offset ``y_\text{offset}`` is found by splitting the distance between the top and bottom extent of the image in half. We take the top and bottom ``y`` coordinate of the top and bottom circumcircles as the top and bottom extent, respectively:
 
 ```math
 \begin{align}
