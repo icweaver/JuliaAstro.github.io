@@ -30,7 +30,7 @@ This basic design document shows how to construct the [JuliaAstro](https://githu
 md"""
 ## Concept
 
-The standard Julia logo, but with the circle shapes replaces by star shapes.
+The standard Julia logo, but with the circle shapes replaced by star shapes.
 """
 
 # ╔═╡ d7a82821-23e2-4700-8fe4-41061ce3a66c
@@ -55,7 +55,7 @@ end
 
 # ╔═╡ 59ddcb43-1973-472a-af40-26dbb734740a
 md"""
-Overlay: $(@bind overlay CheckBox())
+Overlay: $(@bind overlay CheckBox(; default = true))
 """
 
 # ╔═╡ fe659653-46ac-41dd-84c6-3641155955fa
