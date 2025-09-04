@@ -47,7 +47,7 @@ With the underlying framework established, we use the following parameters to de
 star ratio | star corner radius
 :-: | :-:
 `ratio` kwarg passed to `Luxor.star` | corner radius passed to `Luxor.polysmooth`
-$(@bindname r_s Slider(0:0.05:1.0; default = 0.45, show_value = true)) | $(@bindname corner_radius_s Slider(1:30; default = 5, show_value = true))
+$(@bindname r_s Slider(0.35:0.05:1.0; default = 0.45, show_value = true)) | $(@bindname corner_radius_s Slider(1:5; show_value = true))
 
 ---
 """
@@ -57,6 +57,20 @@ end
 md"""
 Overlay: $(@bind overlay CheckBox(; default = true))
 """
+
+# ╔═╡ 5ffda01b-2bac-42fc-86ec-eb16032ac72b
+md"""
+## Diffraction spikes
+"""
+
+# ╔═╡ a6f3939b-febb-4b67-996b-40120d07f895
+@bindname polysuper_n Slider(0.2:0.05:2.0; default = 0.35, show_value = true)
+
+# ╔═╡ 63444650-9059-4c5f-9839-f96311676845
+@bindname polysuper_ab Slider(0.2:0.05:1.0; default = 0.45, show_value = true)
+
+# ╔═╡ 1d9d522c-09d9-48a9-86c0-a1724cc168d1
+@bindname polysuper_r Slider(50:200; default = 124, show_value = true)
 
 # ╔═╡ fe659653-46ac-41dd-84c6-3641155955fa
 md"""
@@ -130,21 +144,47 @@ let
 		
 	for (center, color) in zip(corners, colors)
 		setcolor(color)
-		# star_i = star(center, R_star, 5, r_s, -π/2; vertices = true)
+		star_i = star(center, R_star, 5, r_s, -π/2; vertices = true)
+		polysmooth(star_i, corner_radius_s; action = :fill)
+	end
+
+	if overlay
+		setcolor("black")
+		ngon(center, R_tri, 3, π/6; action = :stroke)
+		circle.(corners, R_star; action = :stroke)
+		rect(-width/2, -height/2, width, height; action = :stroke)
+	end
+
+	finish()
+	preview()
+# end width height
+end
+
+# ╔═╡ 73582ea1-d6d8-40bb-977e-567a6c13b090
+let
+	Drawing(width, height, :png)
+	origin()
+# @svg begin
+	background("transparent")
+	center = Point(0, vertical_offset)
+	corners = ngon(center, R_tri, 3, π/6; vertices = true)
+	colors = Luxor.julia_red, Luxor.julia_green, Luxor.julia_purple
+		
+	for (center, color) in zip(corners, colors)
+		setcolor(color)
 		star_i = polysuper(center,
-			n1 = 0.35,
-			n2 = 0.35,
-			n3 = 0.35,
+			n1 = polysuper_n,
+			n2 = polysuper_n,
+			n3 = polysuper_n,
 			m = 6,
-			a = 0.7,
-			b = 0.7,
-			radius = 100,
+			a = polysuper_ab,
+			b = polysuper_ab,
+			radius = polysuper_r,
 			# action = :fill,
 			vertices = true,
 		)
 		polyrotate!(star_i, π/6; center)
 		poly(star_i; action = :fill)
-		# polysmooth(star_i, corner_radius_s; action = :fill)
 	end
 
 	if overlay
@@ -847,8 +887,13 @@ version = "4.1.0+0"
 # ╟─55a36f1b-e6e1-4ff8-96b7-838776f51ad1
 # ╟─3bb31c16-5372-4b29-a3e8-3a70886f1940
 # ╟─d7a82821-23e2-4700-8fe4-41061ce3a66c
-# ╠═7fd6c788-44ef-4fc5-b9b9-a0a4ac699d55
+# ╟─7fd6c788-44ef-4fc5-b9b9-a0a4ac699d55
 # ╟─59ddcb43-1973-472a-af40-26dbb734740a
+# ╟─5ffda01b-2bac-42fc-86ec-eb16032ac72b
+# ╟─a6f3939b-febb-4b67-996b-40120d07f895
+# ╟─63444650-9059-4c5f-9839-f96311676845
+# ╟─1d9d522c-09d9-48a9-86c0-a1724cc168d1
+# ╠═73582ea1-d6d8-40bb-977e-567a6c13b090
 # ╟─fe659653-46ac-41dd-84c6-3641155955fa
 # ╠═3a69b14f-903f-4966-81fd-db9b8a3f0b2b
 # ╠═164e437c-a5db-4345-abe2-b8c0cbed71ad
