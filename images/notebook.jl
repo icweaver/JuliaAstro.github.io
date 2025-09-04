@@ -119,16 +119,32 @@ R_star = R_tri * √(3) / 2
 vertical_offset = R_tri / 4 #(0.5*R_tri + R_star*(1.0 - cos(π/5))) / 2
 
 # ╔═╡ 7fd6c788-44ef-4fc5-b9b9-a0a4ac699d55
-@svg begin
-	background("white")
+let
+	Drawing(width, height, :png)
+	origin()
+# @svg begin
+	background("transparent")
 	center = Point(0, vertical_offset)
 	corners = ngon(center, R_tri, 3, π/6; vertices = true)
 	colors = Luxor.julia_red, Luxor.julia_green, Luxor.julia_purple
 		
 	for (center, color) in zip(corners, colors)
 		setcolor(color)
-		star_i = star(center, R_star, 5, r_s, -π/2; vertices = true)
-		polysmooth(star_i, corner_radius_s; action = :fill)
+		# star_i = star(center, R_star, 5, r_s, -π/2; vertices = true)
+		star_i = polysuper(center,
+			n1 = 0.35,
+			n2 = 0.35,
+			n3 = 0.35,
+			m = 6,
+			a = 0.7,
+			b = 0.7,
+			radius = 100,
+			# action = :fill,
+			vertices = true,
+		)
+		polyrotate!(star_i, π/6; center)
+		poly(star_i; action = :fill)
+		# polysmooth(star_i, corner_radius_s; action = :fill)
 	end
 
 	if overlay
@@ -137,7 +153,11 @@ vertical_offset = R_tri / 4 #(0.5*R_tri + R_star*(1.0 - cos(π/5))) / 2
 		circle.(corners, R_star; action = :stroke)
 		rect(-width/2, -height/2, width, height; action = :stroke)
 	end
-end width height
+
+	finish()
+	preview()
+# end width height
+end
 
 # ╔═╡ 1c776d20-83c3-4cd5-9219-f583eb9be11f
 TableOfContents()
@@ -827,7 +847,7 @@ version = "4.1.0+0"
 # ╟─55a36f1b-e6e1-4ff8-96b7-838776f51ad1
 # ╟─3bb31c16-5372-4b29-a3e8-3a70886f1940
 # ╟─d7a82821-23e2-4700-8fe4-41061ce3a66c
-# ╟─7fd6c788-44ef-4fc5-b9b9-a0a4ac699d55
+# ╠═7fd6c788-44ef-4fc5-b9b9-a0a4ac699d55
 # ╟─59ddcb43-1973-472a-af40-26dbb734740a
 # ╟─fe659653-46ac-41dd-84c6-3641155955fa
 # ╠═3a69b14f-903f-4966-81fd-db9b8a3f0b2b
